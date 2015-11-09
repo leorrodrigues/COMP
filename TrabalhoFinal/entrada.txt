@@ -1,0 +1,10 @@
+{
+	x=lol();
+	print("OI");
+	print("Valoir:");
+	read(n);
+	x=fat();
+	return (1);
+	print(x);
+}
+
