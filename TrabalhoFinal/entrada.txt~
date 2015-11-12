@@ -1,0 +1,7 @@
+{
+	print("OI");
+	print("Valoir:");
+	read(n);
+	x=fat9;
+	print(x);
+}

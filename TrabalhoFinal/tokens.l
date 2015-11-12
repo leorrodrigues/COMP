@@ -16,7 +16,7 @@ id      (\_|[a-zA-Z])([a-zA-Z]|[0-9]|\_)*
 "while"   {return TWHILE;}
 "print"   {return TPRINT;}
 "read"    {return TREAD;}
-{id}      {return TID;}
+{id}      {insere_lista(strcpy(yylval.id,yytext));return TID;}
 
 "+"	  {return TADD;}
 "-"	  {return TSUB;}
@@ -45,8 +45,8 @@ id      (\_|[a-zA-Z])([a-zA-Z]|[0-9]|\_)*
 {literal} {return TLITERAL;}
 
 
-{num}	{yylval=atof(yytext); return TNUM;}
+{num}	{yylval.constante=atof(yytext); return TNUM;}
 
-. 	{printf( "Erro léxico\n"); exit(0);}
+. 	{printf("Erro antes %s\n", yytext); exit(0);}
 
 

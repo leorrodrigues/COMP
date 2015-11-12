@@ -1,0 +1,13 @@
+#include <stdio.h>
+
+extern FILE *yyin;
+
+int main()
+{
+	FILE *fp;
+	yyin = fopen("entrada.txt","r");
+	printf("Digite uma expressão:");
+	yyparse();
+	return 0;
+}
+

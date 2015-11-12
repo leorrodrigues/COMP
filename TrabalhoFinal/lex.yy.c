@@ -833,7 +833,7 @@ YY_RULE_SETUP
 case 11:
 YY_RULE_SETUP
 #line 19 "tokens.l"
-{return TID;}
+{insere_lista(strcpy(yylval.id,yytext));return TID;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
@@ -943,12 +943,12 @@ YY_RULE_SETUP
 case 33:
 YY_RULE_SETUP
 #line 48 "tokens.l"
-{yylval=atof(yytext); return TNUM;}
+{yylval.constante=atof(yytext); return TNUM;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
 #line 50 "tokens.l"
-{printf( "Erro léxico"); exit(0);}
+{printf("Erro antes %s\n", yytext); exit(0);}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP

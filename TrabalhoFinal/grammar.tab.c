@@ -66,9 +66,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#define YYSTYPE double // AQUI TEM QUE SER STRUCT 
+#include <string.h>
+#include "EDA.h"
+#define YYSTYPE struct dados // AQUI TEM QUE SER STRUCT 
 
-#line 72 "grammar.tab.c" /* yacc.c:339  */
+#line 74 "grammar.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -151,7 +153,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 155 "grammar.tab.c" /* yacc.c:358  */
+#line 157 "grammar.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -451,14 +453,14 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    11,    11,    14,    15,    17,    18,    20,    21,    23,
-      24,    26,    27,    29,    31,    32,    34,    35,    37,    39,
-      40,    42,    43,    45,    47,    48,    50,    51,    52,    53,
-      54,    55,    56,    58,    60,    61,    63,    65,    66,    68,
-      69,    71,    73,    74,    76,    77,    79,    80,    81,    83,
-      84,    85,    87,    88,    89,    90,    91,    93,    96,    98,
-      99,   100,   101,   102,   103,   105,   106,   107,   109,   110,
-     111
+       0,    13,    13,    16,    17,    19,    20,    22,    23,    25,
+      26,    28,    29,    31,    33,    34,    36,    37,    39,    41,
+      42,    44,    45,    47,    49,    50,    52,    53,    54,    55,
+      56,    57,    58,    60,    62,    63,    65,    67,    68,    70,
+      71,    73,    75,    76,    78,    79,    81,    82,    83,    85,
+      86,    87,    89,    90,    91,    92,    93,    95,    98,   100,
+     101,   102,   103,   104,   105,   107,   108,   109,   111,   112,
+     113
 };
 #endif
 
@@ -1330,13 +1332,31 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 11 "grammar.y" /* yacc.c:1646  */
-    {printf("Aceito\n");exit (0);}
-#line 1336 "grammar.tab.c" /* yacc.c:1646  */
+#line 13 "grammar.y" /* yacc.c:1646  */
+    {mostra_tabela();exit (0);}
+#line 1338 "grammar.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 18:
+#line 39 "grammar.y" /* yacc.c:1646  */
+    {tabela_dados(list_principal,dados_principal);}
+#line 1344 "grammar.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 19:
+#line 41 "grammar.y" /* yacc.c:1646  */
+    {insere_dados(strcpy(yylval.tipo,"int"));}
+#line 1350 "grammar.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 20:
+#line 42 "grammar.y" /* yacc.c:1646  */
+    {insere_dados(strcpy(yylval.tipo,"String"));}
+#line 1356 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1340 "grammar.tab.c" /* yacc.c:1646  */
+#line 1360 "grammar.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1564,7 +1584,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 114 "grammar.y" /* yacc.c:1906  */
+#line 116 "grammar.y" /* yacc.c:1906  */
 
 #include "lex.yy.c"
 

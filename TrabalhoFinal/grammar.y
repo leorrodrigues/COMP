@@ -1,14 +1,16 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
-#define YYSTYPE double // AQUI TEM QUE SER STRUCT 
+#include <string.h>
+#include "EDA.h"
+#define YYSTYPE struct dados // AQUI TEM QUE SER STRUCT 
 %}
 
 %token TVOID TINT TSTRING TRETURN TIF TELSE TWHILE TPRINT TREAD TID TADD TSUB TMUL TDIV TAPAR TFPAR TPONTOEVIRGULA TVIRGULA TACHA TFCHA TCOMPARACAOIGUAL TMENORIGUAL TMAIORIGUAL TMENOR TMAIOR TDIFERENTE TAND TOR TNOT TIGUAL TLITERAL TNUM
 
 %%
 
-Principal: 	Programa {printf("Aceito\n");exit (0);}
+Principal: 	Programa {mostra_tabela();exit (0);}
 		;
 
 Programa:	ListaFuncoes BlocoPrincipal
@@ -34,10 +36,10 @@ BlocoPrincipal:	TACHA Declaracoes ListaCmd TFCHA
 Declaracoes:	Declaracoes Declaracao
 		| Declaracao
 		;
-Declaracao:	Tipo ListaId TPONTOEVIRGULA
+Declaracao:	Tipo ListaId TPONTOEVIRGULA {tabela_dados(list_principal,dados_principal);}
 		;
-Tipo:		TINT
-		| TSTRING
+Tipo:		TINT{insere_dados(strcpy(yylval.tipo,"int"));}
+		| TSTRING{insere_dados(strcpy(yylval.tipo,"String"));}
 		;
 ListaId:	ListaId TVIRGULA TID
 		| TID
