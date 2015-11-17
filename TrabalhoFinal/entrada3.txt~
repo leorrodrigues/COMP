@@ -1,7 +1,7 @@
 int fat(int n)
 {
 	int f;
-	String nome,sobrenome,maluco;
+	
 	f = 1;
 	while(n>0)
 	{
@@ -10,7 +10,7 @@ int fat(int n)
 	}
 }
 {
-	int x,y,w,k;
+	int x;
 	
 	print("Valor:");
 	read(n);

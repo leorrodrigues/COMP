@@ -16,7 +16,7 @@ id      (\_|[a-zA-Z])([a-zA-Z]|[0-9]|\_)*
 "while"   {return TWHILE;}
 "print"   {return TPRINT;}
 "read"    {return TREAD;}
-{id}      {insere_lista(strcpy(yylval.id,yytext));return TID;}
+{id}      {strcpy(yylval.id,yytext);return TID;}
 
 "+"	  {return TADD;}
 "-"	  {return TSUB;}

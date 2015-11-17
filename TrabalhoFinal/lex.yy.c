@@ -833,7 +833,7 @@ YY_RULE_SETUP
 case 11:
 YY_RULE_SETUP
 #line 19 "tokens.l"
-{insere_lista(strcpy(yylval.id,yytext));return TID;}
+{strcpy(yylval.id,yytext);return TID;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP

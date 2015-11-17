@@ -19,7 +19,7 @@ Programa:	ListaFuncoes BlocoPrincipal
 ListaFuncoes:	ListaFuncoes Funcao
 		| Funcao
 		;
-Funcao:		TipoRetorno TID TAPAR DeclParametros TFPAR BlocoPrincipal
+Funcao:		TipoRetorno TID TAPAR DeclParametros TFPAR BlocoPrincipal 
 		| TipoRetorno TID TAPAR TFPAR BlocoPrincipal
 		;
 TipoRetorno: 	Tipo
@@ -28,7 +28,7 @@ TipoRetorno: 	Tipo
 DeclParametros:	DeclParametros TVIRGULA Parametro
 		| Parametro
 		;
-Parametro:	Tipo TID
+Parametro:	Tipo TID {insere_lista(yylval.id);}
 		;
 BlocoPrincipal:	TACHA Declaracoes ListaCmd TFCHA
 		| TACHA ListaCmd TFCHA
@@ -41,8 +41,8 @@ Declaracao:	Tipo ListaId TPONTOEVIRGULA {tabela_dados(list_principal,dados_princ
 Tipo:		TINT{insere_dados(strcpy(yylval.tipo,"int"));}
 		| TSTRING{insere_dados(strcpy(yylval.tipo,"String"));}
 		;
-ListaId:	ListaId TVIRGULA TID
-		| TID
+ListaId:	ListaId TVIRGULA TID{insere_lista(yylval.id);}
+		| TID {insere_lista(yylval.id);}
 		;
 Bloco:		TACHA ListaCmd TFCHA
 		;

@@ -1,4 +1,6 @@
 {
+	int a;
+	String XUXU;
 	x=lol();
 	print("OI");
 	print("Valoir:");

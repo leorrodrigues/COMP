@@ -1337,26 +1337,44 @@ yyreduce:
 #line 1338 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
+  case 13:
+#line 31 "grammar.y" /* yacc.c:1646  */
+    {insere_lista(yylval.id);}
+#line 1344 "grammar.tab.c" /* yacc.c:1646  */
+    break;
+
   case 18:
 #line 39 "grammar.y" /* yacc.c:1646  */
     {tabela_dados(list_principal,dados_principal);}
-#line 1344 "grammar.tab.c" /* yacc.c:1646  */
+#line 1350 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
 #line 41 "grammar.y" /* yacc.c:1646  */
     {insere_dados(strcpy(yylval.tipo,"int"));}
-#line 1350 "grammar.tab.c" /* yacc.c:1646  */
+#line 1356 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
 #line 42 "grammar.y" /* yacc.c:1646  */
     {insere_dados(strcpy(yylval.tipo,"String"));}
-#line 1356 "grammar.tab.c" /* yacc.c:1646  */
+#line 1362 "grammar.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 21:
+#line 44 "grammar.y" /* yacc.c:1646  */
+    {insere_lista(yylval.id);}
+#line 1368 "grammar.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 22:
+#line 45 "grammar.y" /* yacc.c:1646  */
+    {insere_lista(yylval.id);}
+#line 1374 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1360 "grammar.tab.c" /* yacc.c:1646  */
+#line 1378 "grammar.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

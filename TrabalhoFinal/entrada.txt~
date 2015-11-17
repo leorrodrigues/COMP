@@ -1,7 +1,13 @@
 {
+	int a;
+	String XUXU;
+	x=lol();
+	String XAXA;
 	print("OI");
 	print("Valoir:");
 	read(n);
-	x=fat9;
+	x=fat();
+	return (1);
 	print(x);
 }
+

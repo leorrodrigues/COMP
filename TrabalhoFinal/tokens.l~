@@ -8,8 +8,8 @@ id      (\_|[a-zA-Z])([a-zA-Z]|[0-9]|\_)*
 %%
 {ws}	{}
 "void"    {return TVOID;}
-"int"     {insere_dados(strcpy(yylval.tipo,yytext));return TINT;}
-"String"  {insere_dados(strcpy(yylval.tipo,yytext));return TSTRING;}
+"int"     {return TINT;}
+"String"  {return TSTRING;}
 "return"  {return TRETURN;}
 "if"      {return TIF;}
 "else"    {return TELSE;}

@@ -24,6 +24,6 @@ int fat(int n)
 }
 
 {
-	int HA;
-	return 1;
+int HA;
+return 1;
 }
