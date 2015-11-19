@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#define TAMANHO_VARIAVEL 40
 typedef struct lista{
     struct lista *proximo;
     struct lista *anterior;
@@ -11,7 +12,7 @@ typedef struct lista{
 typedef struct tabela{
     struct tabela *proximo;
     struct tabela *anterior;
-    char id[40];
+    char id[TAMANHO_VARIAVEL];
     char tipo[20];
     int pos;
 }Tabela;
@@ -23,16 +24,18 @@ typedef struct dados{
 }Dados;
 
 typedef struct instrucao{
-    int label,p1,p2;
-    char _instrucao[50];
+    int label,_instrucao,p1,p2;
 }Instrucao;
 
 void mostra_lista();
-void insere_lista(char id[50]);
+void insere_lista(char id[TAMANHO_VARIAVEL]);
 void tabela_dados(Lista *lista,Dados *dados);
 void mostra_tabela();
+void mostra_gerar();
 void insere_dados(char *lido);
-Lista *inserefim_lista(Lista *dados,char id[50]);
+void cria_jasmin();
+int procura_tabela(char id[TAMANHO_VARIAVEL]);
+Lista *inserefim_lista(Lista *dados,char id[TAMANHO_VARIAVEL]);
 Dados *inserefim_dados(char *lido);
 Tabela *insere_tabela(Lista *lista,Dados *dados);
 
@@ -43,11 +46,11 @@ Tabela *tab=NULL;//inicia a tabela vazia
 Dados *dados_principal;//inicia os dados vazios
 Instrucao *inst=NULL;//Iniciamos o vetor de instrucoes vazio
 
-void insere_lista(char id[50]){
+void insere_lista(char id[TAMANHO_VARIAVEL]){
     list_principal=inserefim_lista(list_principal,id);
 }
 
-Lista *inserefim_lista(Lista *dados,char id[50]) {
+Lista *inserefim_lista(Lista *dados,char id[TAMANHO_VARIAVEL]) {
     //Criando listas auxiliares
     Lista *final,*aux;
     aux=list_principal;//aux aponta para o inicio da lista.
@@ -111,43 +114,120 @@ Tabela *insere_tabela(Lista *lista,Dados *dados){
     return(tab);
 }
 
-void gerar(char *comando,char *tipo){
+void gerar(int comando,int p1, int p2){
     if(inst==NULL)
         inst=(Instrucao *)malloc(sizeof(Instrucao));
     else
         inst=(Instrucao *)realloc(inst,sizeof(Instrucao)*(PROXINST+1)); //Alocamos tamanho para o vetor de instrucoes
-    if(strcmp(tipo,"int")==0){//caso o tipo do comando passado seja inteiro -> Funcoes BIPUSH , ICONST_N , LDC
-        int valor;
-        valor=atoi(comando);
-        if(valor>-128 && valor<127){ //FAZ A VERIFICACAO PARA BIPUSH
-            if(valor==1){
-
-            }
-            else if(valor==2){
-
-            }
-            else if(valor==3){
-
-            }
-            else if(valor==4){
-
-            }
-            else if(valor==5){
-
-            }
-            else{//caso nao seja nenhum ICONS_N chamamos BIPUSH N
+    if(comando==20){ //BIPUSH
+        if(p1> -128 && p1<127){//verifica se é BIPUSH OU ICONST SE NAO FOR É LDC
+            if(p1==0){
                 inst[PROXINST].label=-1;
-                strcpy(inst[PROXINST]._instrucao,strcat("bipush ",comando));
+                inst[PROXINST].p1=-1;
+                inst[PROXINST].p2=-1;
+                inst[PROXINST]._instrucao=10;
+            }
+            else if(p1==1){
+                inst[PROXINST].label=-1;
+                inst[PROXINST].p1=-1;
+                inst[PROXINST].p2=-1;
+                inst[PROXINST]._instrucao=11;
+            }
+            else if(p1==2){
+                inst[PROXINST].label=-1;
+                inst[PROXINST].p1=-1;
+                inst[PROXINST].p2=-1;
+                inst[PROXINST]._instrucao=12;
+            }
+            else if(p1==3){
+                inst[PROXINST].label=-1;
+                inst[PROXINST].p1=-1;
+                inst[PROXINST].p2=-1;
+                inst[PROXINST]._instrucao=13;
+            }
+            else if(p1==4){
+                inst[PROXINST].label=-1;
+                inst[PROXINST].p1=-1;
+                inst[PROXINST].p2=-1;
+                inst[PROXINST]._instrucao=14;
+            }
+            else if(p1==5){
+                inst[PROXINST].label=-1;
+                inst[PROXINST].p1=-1;
+                inst[PROXINST].p2=-1;
+                inst[PROXINST]._instrucao=15;
+            }
+            else{
+                inst[PROXINST].label=-1;
+                inst[PROXINST].p1=p1;
+                inst[PROXINST].p2=-1;
+                inst[PROXINST]._instrucao=20;
             }
         }
-        else{//GUARDA A FUNCAO LDC
-
+        else{//É LDC
+            inst[PROXINST].label=-1;
+            inst[PROXINST].p1=p1;
+            inst[PROXINST].p2=-1;
+            inst[PROXINST]._instrucao=21;
         }
     }
-    else{ //caso o tipo do comando passado seja char -> PARA DEMAIS FUNCOES
-
+    else if(comando==16){ //ILOAD
+        inst[PROXINST].label=-1;
+        inst[PROXINST].p1=p1;
+        inst[PROXINST].p2=-1;
+        inst[PROXINST]._instrucao=16;
+    }
+    else if(comando==17){ //ISTORE
+        inst[PROXINST].label=-1;
+        inst[PROXINST].p1=p1;
+        inst[PROXINST].p2=-1;
+        inst[PROXINST]._instrucao=17;
+    }
+    else if(comando==18){//IADD
+        inst[PROXINST].label=-1;
+        inst[PROXINST].p1=-1;
+        inst[PROXINST].p2=-1;
+        inst[PROXINST]._instrucao=18;
+    }
+    else if(comando==19){//IMULL
+        inst[PROXINST].label=-1;
+        inst[PROXINST].p1=-1;
+        inst[PROXINST].p2=-1;
+        inst[PROXINST]._instrucao=19;
+    }
+    else if(comando==22){//IDIV
+        inst[PROXINST].label=-1;
+        inst[PROXINST].p1=-1;
+        inst[PROXINST].p2=-1;
+        inst[PROXINST]._instrucao=22;
+    }
+    else if(comando==23){//ISUB
+        inst[PROXINST].label=-1;
+        inst[PROXINST].p1=-1;
+        inst[PROXINST].p2=-1;
+        inst[PROXINST]._instrucao=23;
     }
     PROXINST++;
+}
+
+int procura_tabela(char id[TAMANHO_VARIAVEL]){
+    Tabela *aux;
+    aux=tab;
+    while(aux!=NULL){
+        if(strcmp(aux->id,id)==0)
+            return(aux->pos);
+        if(aux->proximo!=NULL)
+            aux=aux->proximo;
+        else
+            return(-1);
+    }
+}
+
+void mostra_gerar(){
+    int i;
+    for(i=0;i<PROXINST;i++){
+        printf("LABEL: %i\tP1: %i\tP2: %i\t _INSTRUCAO: %i\n",inst[i].label,inst[i].p1,inst[i].p2,inst[i]._instrucao);
+    }
 }
 
 void mostra_tabela(){
@@ -163,4 +243,53 @@ void mostra_tabela(){
         aux=aux->proximo;
     }
     printf("+-----+--------+--------+-----+-------+------+------+-------+------+-----+\n");
+}
+
+void cria_jasmin(){
+    FILE *fp;
+    int i,valor_label=0;
+    fp=fopen("entradaJasmin.j","w");
+	if(!fp){
+        puts("Erro na abertura do arquivo Jasmin\n");
+        exit(0);
+	}
+	else{
+        fprintf(fp,".class public entradaJasmin\n.super java/lang/Object\n\n.method public <init>()V\n   aload_0\n\n   invokenonvirtual java/lang/Object/<init>()V\n   return\n.end method\n\n");
+        fprintf(fp,".method public static main([Ljava/lang/String;)V\n   .limit stack 2\n   .limit locals %i\n",POS);
+        for(i=0;i<PROXINST;i++){
+            if(inst[i].label!=-1){
+                valor_label++;
+                fprintf(fp," l%i\n",valor_label);
+            }
+            if(inst[i]._instrucao>=10 && inst[i]._instrucao<=15){//escreve iconst_n
+                fprintf(fp,"   iconst_%i\n",inst[i]._instrucao-10);
+            }
+            else if(inst[i]._instrucao==16){//escreve iload
+                fprintf(fp,"   iload %i\n",inst[i].p1);
+            }
+            else if(inst[i]._instrucao==17){//escreve istore
+                fprintf(fp,"   istore %i\n",inst[i].p1);
+            }
+            else if(inst[i]._instrucao==18){//escreve iadd
+                fprintf(fp,"   iadd\n");
+            }
+            else if(inst[i]._instrucao==19){//escreve imul
+                fprintf(fp,"   imul\n");
+            }
+            else if(inst[i]._instrucao==20){//escreve bipush
+                fprintf(fp,"   bipush %i\n",inst[i].p1);
+            }
+            else if(inst[i]._instrucao==21){//escreve ldc
+                fprintf(fp,"   ldc %i\n",inst[i].p1);
+            }
+            else if(inst[i]._instrucao==22){//escreve idiv
+                fprintf(fp,"   idiv\n");
+            }
+            else if(inst[i]._instrucao==23){//escreve isub
+                fprintf(fp,"   isub\n");
+            }
+        }
+        fprintf(fp,"   return\n.end method\n");
+	}
+	fclose(fp);
 }

@@ -29,7 +29,7 @@
 
 %%
 
-Principal: 	Programa {mostra_tabela();cria_jasmin();}
+Principal: 	Programa {mostra_tabela();}
 		;
 
 Programa:	ListaFuncoes BlocoPrincipal

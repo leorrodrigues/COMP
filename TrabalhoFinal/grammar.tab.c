@@ -70,7 +70,26 @@
 #include "EDA.h"
 #define YYSTYPE struct dados // AQUI TEM QUE SER STRUCT 
 
-#line 74 "grammar.tab.c" /* yacc.c:339  */
+#define ICONST_0 10
+#define ICONST_1 11
+#define ICONST_2 12
+#define ICONST_3 13
+#define ICONST_4 14
+#define ICONST_5 15
+
+#define ILOAD    16
+#define ISTORE   17
+#define IADD     18
+#define IMULL    19
+#define BIPUSH	 20
+#define LDC      21
+
+#define IDIV     22
+#define ISUB     23
+
+
+
+#line 93 "grammar.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -153,7 +172,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 157 "grammar.tab.c" /* yacc.c:358  */
+#line 176 "grammar.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -453,14 +472,14 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    13,    13,    16,    17,    19,    20,    22,    23,    25,
-      26,    28,    29,    31,    33,    34,    36,    37,    39,    41,
-      42,    44,    45,    47,    49,    50,    52,    53,    54,    55,
-      56,    57,    58,    60,    62,    63,    65,    67,    68,    70,
-      71,    73,    75,    76,    78,    79,    81,    82,    83,    85,
-      86,    87,    89,    90,    91,    92,    93,    95,    98,   100,
-     101,   102,   103,   104,   105,   107,   108,   109,   111,   112,
-     113
+       0,    32,    32,    35,    36,    38,    39,    41,    42,    44,
+      45,    47,    48,    50,    52,    53,    55,    56,    58,    60,
+      61,    63,    64,    66,    68,    69,    71,    72,    73,    74,
+      75,    76,    77,    79,    81,    82,    84,    86,    87,    89,
+      90,    92,    94,    95,    97,    98,   101,   102,   103,   105,
+     106,   107,   109,   110,   111,   112,   113,   117,   120,   122,
+     123,   124,   125,   126,   127,   129,   130,   131,   133,   134,
+     135
 };
 #endif
 
@@ -1332,49 +1351,103 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 13 "grammar.y" /* yacc.c:1646  */
-    {mostra_tabela();exit (0);}
-#line 1338 "grammar.tab.c" /* yacc.c:1646  */
+#line 32 "grammar.y" /* yacc.c:1646  */
+    {mostra_tabela();cria_jasmin();}
+#line 1357 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 31 "grammar.y" /* yacc.c:1646  */
+#line 50 "grammar.y" /* yacc.c:1646  */
     {insere_lista(yylval.id);}
-#line 1344 "grammar.tab.c" /* yacc.c:1646  */
+#line 1363 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 39 "grammar.y" /* yacc.c:1646  */
+#line 58 "grammar.y" /* yacc.c:1646  */
     {tabela_dados(list_principal,dados_principal);}
-#line 1350 "grammar.tab.c" /* yacc.c:1646  */
+#line 1369 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 41 "grammar.y" /* yacc.c:1646  */
+#line 60 "grammar.y" /* yacc.c:1646  */
     {insere_dados(strcpy(yylval.tipo,"int"));}
-#line 1356 "grammar.tab.c" /* yacc.c:1646  */
+#line 1375 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 42 "grammar.y" /* yacc.c:1646  */
+#line 61 "grammar.y" /* yacc.c:1646  */
     {insere_dados(strcpy(yylval.tipo,"String"));}
-#line 1362 "grammar.tab.c" /* yacc.c:1646  */
+#line 1381 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 44 "grammar.y" /* yacc.c:1646  */
+#line 63 "grammar.y" /* yacc.c:1646  */
     {insere_lista(yylval.id);}
-#line 1368 "grammar.tab.c" /* yacc.c:1646  */
+#line 1387 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 45 "grammar.y" /* yacc.c:1646  */
+#line 64 "grammar.y" /* yacc.c:1646  */
     {insere_lista(yylval.id);}
-#line 1374 "grammar.tab.c" /* yacc.c:1646  */
+#line 1393 "grammar.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 33:
+#line 79 "grammar.y" /* yacc.c:1646  */
+    {gerar(ISTORE,procura_tabela(yylval.id),-1);}
+#line 1399 "grammar.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 37:
+#line 86 "grammar.y" /* yacc.c:1646  */
+    {gerar(ISTORE,procura_tabela((yyval).id),-1);}
+#line 1405 "grammar.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 39:
+#line 89 "grammar.y" /* yacc.c:1646  */
+    {gerar(ISTORE,procura_tabela((yyval).id),-1);}
+#line 1411 "grammar.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 46:
+#line 101 "grammar.y" /* yacc.c:1646  */
+    {gerar(IADD,-1,-1);}
+#line 1417 "grammar.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 47:
+#line 102 "grammar.y" /* yacc.c:1646  */
+    {gerar(ISUB,-1,-1);}
+#line 1423 "grammar.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 49:
+#line 105 "grammar.y" /* yacc.c:1646  */
+    {gerar(IMULL,-1,-1);}
+#line 1429 "grammar.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 50:
+#line 106 "grammar.y" /* yacc.c:1646  */
+    {gerar(IDIV,-1,-1);}
+#line 1435 "grammar.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 54:
+#line 111 "grammar.y" /* yacc.c:1646  */
+    {gerar(ILOAD,procura_tabela(yylval.id),-1);}
+#line 1441 "grammar.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 55:
+#line 112 "grammar.y" /* yacc.c:1646  */
+    {gerar(BIPUSH,yylval.constante,-1);}
+#line 1447 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1378 "grammar.tab.c" /* yacc.c:1646  */
+#line 1451 "grammar.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1602,7 +1675,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 116 "grammar.y" /* yacc.c:1906  */
+#line 138 "grammar.y" /* yacc.c:1906  */
 
 #include "lex.yy.c"
 
