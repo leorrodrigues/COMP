@@ -22,6 +22,11 @@ typedef struct dados{
     char id[50];
 }Dados;
 
+typedef struct instrucao{
+    int label,p1,p2;
+    char _instrucao[50];
+}Instrucao;
+
 void mostra_lista();
 void insere_lista(char id[50]);
 void tabela_dados(Lista *lista,Dados *dados);
@@ -32,9 +37,11 @@ Dados *inserefim_dados(char *lido);
 Tabela *insere_tabela(Lista *lista,Dados *dados);
 
 int POS=0;//iniciamos as posicoes da tabela.
+int PROXINST=0;//iniciamos as posicoes das intrucoes
 Lista *list_principal=NULL; //inicia a lista vazia
 Tabela *tab=NULL;//inicia a tabela vazia
 Dados *dados_principal;//inicia os dados vazios
+Instrucao *inst=NULL;//Iniciamos o vetor de instrucoes vazio
 
 void insere_lista(char id[50]){
     list_principal=inserefim_lista(list_principal,id);
@@ -102,6 +109,45 @@ Tabela *insere_tabela(Lista *lista,Dados *dados){
     aux->proximo=final;
     final->anterior=aux;
     return(tab);
+}
+
+void gerar(char *comando,char *tipo){
+    if(inst==NULL)
+        inst=(Instrucao *)malloc(sizeof(Instrucao));
+    else
+        inst=(Instrucao *)realloc(inst,sizeof(Instrucao)*(PROXINST+1)); //Alocamos tamanho para o vetor de instrucoes
+    if(strcmp(tipo,"int")==0){//caso o tipo do comando passado seja inteiro -> Funcoes BIPUSH , ICONST_N , LDC
+        int valor;
+        valor=atoi(comando);
+        if(valor>-128 && valor<127){ //FAZ A VERIFICACAO PARA BIPUSH
+            if(valor==1){
+
+            }
+            else if(valor==2){
+
+            }
+            else if(valor==3){
+
+            }
+            else if(valor==4){
+
+            }
+            else if(valor==5){
+
+            }
+            else{//caso nao seja nenhum ICONS_N chamamos BIPUSH N
+                inst[PROXINST].label=-1;
+                strcpy(inst[PROXINST]._instrucao,strcat("bipush ",comando));
+            }
+        }
+        else{//GUARDA A FUNCAO LDC
+
+        }
+    }
+    else{ //caso o tipo do comando passado seja char -> PARA DEMAIS FUNCOES
+
+    }
+    PROXINST++;
 }
 
 void mostra_tabela(){
