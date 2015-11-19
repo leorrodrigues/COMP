@@ -9,4 +9,11 @@
 	c=c*1000;
 	e=a+b;
 	f=e/2;
+	d=e+f;
+	print(a);
+	print(b);
+	print(c);
+	print(d);
+	print(e);
+	print(f);
 }

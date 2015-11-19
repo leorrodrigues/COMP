@@ -31,5 +31,27 @@
    iconst_2
    idiv
    istore 6
+   iload 5
+   iload 6
+   iadd
+   istore 4
+   getstatic java/lang/System/out Ljava/io/PrintStream;
+   iload 1
+   invokevirtual java/io/PrintStream/println(I)V
+   getstatic java/lang/System/out Ljava/io/PrintStream;
+   iload 2
+   invokevirtual java/io/PrintStream/println(I)V
+   getstatic java/lang/System/out Ljava/io/PrintStream;
+   iload 3
+   invokevirtual java/io/PrintStream/println(I)V
+   getstatic java/lang/System/out Ljava/io/PrintStream;
+   iload 4
+   invokevirtual java/io/PrintStream/println(I)V
+   getstatic java/lang/System/out Ljava/io/PrintStream;
+   iload 5
+   invokevirtual java/io/PrintStream/println(I)V
+   getstatic java/lang/System/out Ljava/io/PrintStream;
+   iload 6
+   invokevirtual java/io/PrintStream/println(I)V
    return
 .end method

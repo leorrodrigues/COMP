@@ -5,23 +5,25 @@
 #include "EDA.h"
 #define YYSTYPE struct dados // AQUI TEM QUE SER STRUCT 
 
-#define ICONST_0 10
-#define ICONST_1 11
-#define ICONST_2 12
-#define ICONST_3 13
-#define ICONST_4 14
-#define ICONST_5 15
+#define ICONST_0  10
+#define ICONST_1  11
+#define ICONST_2  12
+#define ICONST_3  13
+#define ICONST_4  14
+#define ICONST_5  15
 
-#define ILOAD    16
-#define ISTORE   17
-#define IADD     18
-#define IMULL    19
-#define BIPUSH	 20
-#define LDC      21
+#define ILOAD     16
+#define ISTORE    17
+#define IADD      18
+#define IMULL     19
+#define BIPUSH	  20
+#define LDC       21
 
-#define IDIV     22
-#define ISUB     23
+#define IDIV      22
+#define ISUB      23
 
+#define PRINT_INT 30
+#define PRINT_STG 31
 
 %}
 
@@ -86,8 +88,8 @@ CmdEnquanto:	TWHILE TAPAR ExpressaoLogica TFPAR Bloco
 CmdAtrib:	TID TIGUAL ExpressaoAritimetica TPONTOEVIRGULA {gerar(ISTORE,procura_tabela($$.id),-1);}  //coloca na variavel que esta na lista de constantes o resultado aritmetico
 		| TID TIGUAL TLITERAL TPONTOEVIRGULA
 		;
-CmdEscrita:	TPRINT TAPAR ExpressaoAritimetica TFPAR TPONTOEVIRGULA {gerar(ISTORE,procura_tabela($$.id),-1);} //retira da pilha normal e coloca na variavel que está na posição id.posLexval
-		| TPRINT TAPAR TLITERAL TFPAR TPONTOEVIRGULA
+CmdEscrita:	TPRINT TAPAR ExpressaoAritimetica TFPAR TPONTOEVIRGULA {gerar(PRINT_INT,procura_tabela(yylval.id),-1);} //retira da pilha normal e coloca na variavel que está na posição id.posLexval
+		| TPRINT TAPAR TLITERAL TFPAR TPONTOEVIRGULA {gerar(PRINT_STG,procura_tabela(yylval.id),-1);}
 		;
 CmdLeitura:	TREAD TAPAR TID TFPAR TPONTOEVIRGULA
 		;
