@@ -8,7 +8,7 @@
 	z=z+1;
 	print(z);
 	nome1="Amanda";
-	sobrenome=" Rodrigues\n";
+	sobrenome="Rodrigues\n";
 	nome2="Leonardo";
 	print(nome1);
 	print(sobrenome);

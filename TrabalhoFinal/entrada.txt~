@@ -4,7 +4,7 @@
 	x=10;	
 	print("OI");
 	print("Valoir: ");
+	return (1);
 	print(x);
-	print("\n");	
 }
 

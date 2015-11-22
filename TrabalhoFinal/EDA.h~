@@ -396,7 +396,7 @@ void cria_jasmin(){
             else if(inst[i]._instrucao==32){//PRINT de STRING printf(nome);
                 fprintf(fp,"   getstatic java/lang/System/out Ljava/io/PrintStream;\n");
                 fprintf(fp,"   aload %i\n",inst[i].p1);
-                fprintf(fp,"   invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V\n");
+                fprintf(fp,"   invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V\n");
             }
         }
         fprintf(fp,"   return\n.end method\n");
