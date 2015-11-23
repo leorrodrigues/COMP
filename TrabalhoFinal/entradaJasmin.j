@@ -10,48 +10,42 @@
 
 .method public static main([Ljava/lang/String;)V
    .limit stack 2
-   .limit locals 11
-   iconst_1
+   .limit locals 7
+   bipush 10
    istore 1
-   iconst_2
-   iload 1
-   iadd
+   bipush 100
    istore 2
-   iconst_2
-   istore 3
-   iload 3
-   ldc 1000
-   imul
-   istore 3
-   iload 1
    iload 2
-   iadd
-   istore 5
-   iload 5
-   iconst_2
+   iload 1
    idiv
-   istore 6
-   iload 5
-   iload 6
-   iadd
-   istore 4
-   getstatic java/lang/System/out Ljava/io/PrintStream;
-   iload 1
-   invokevirtual java/io/PrintStream/println(I)V
-   getstatic java/lang/System/out Ljava/io/PrintStream;
-   iload 2
-   invokevirtual java/io/PrintStream/println(I)V
+   istore 3
    getstatic java/lang/System/out Ljava/io/PrintStream;
    iload 3
    invokevirtual java/io/PrintStream/println(I)V
+   iload 3
+   iconst_1
+   iadd
+   istore 3
    getstatic java/lang/System/out Ljava/io/PrintStream;
-   iload 4
+   iload 3
    invokevirtual java/io/PrintStream/println(I)V
+   ldc "Amanda"
+   astore 4
+   ldc " Rodrigues\n"
+   astore 6
+   ldc "Leonardo"
+   astore 5
    getstatic java/lang/System/out Ljava/io/PrintStream;
-   iload 5
-   invokevirtual java/io/PrintStream/println(I)V
+   aload 4
+   invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
    getstatic java/lang/System/out Ljava/io/PrintStream;
-   iload 6
-   invokevirtual java/io/PrintStream/println(I)V
+   aload 6
+   invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
+   getstatic java/lang/System/out Ljava/io/PrintStream;
+   aload 5
+   invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
+   getstatic java/lang/System/out Ljava/io/PrintStream;
+   aload 6
+   invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
    return
 .end method

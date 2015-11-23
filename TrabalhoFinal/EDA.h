@@ -19,12 +19,14 @@ typedef struct tabela{
 
 typedef struct dados{
     char tipo[50];
-    int constante;
+    int constante,valor;
     char id[50];
+    char str[500];
 }Dados;
 
 typedef struct instrucao{
     int label,_instrucao,p1,p2;
+    char str[500];
 }Instrucao;
 
 void mostra_lista();
@@ -34,6 +36,7 @@ void mostra_tabela();
 void mostra_gerar();
 void insere_dados(char *lido);
 void cria_jasmin();
+char *procura_tabela_tipo(int p1);
 int procura_tabela(char id[TAMANHO_VARIAVEL]);
 Lista *inserefim_lista(Lista *dados,char id[TAMANHO_VARIAVEL]);
 Dados *inserefim_dados(char *lido);
@@ -114,104 +117,169 @@ Tabela *insere_tabela(Lista *lista,Dados *dados){
     return(tab);
 }
 
-void gerar(int comando,int p1, int p2){
+void gerar(int comando,int p1, int p2,char p3[500]){
     if(inst==NULL)
         inst=(Instrucao *)malloc(sizeof(Instrucao));
     else
         inst=(Instrucao *)realloc(inst,sizeof(Instrucao)*(PROXINST+1)); //Alocamos tamanho para o vetor de instrucoes
     if(comando==20){ //BIPUSH
-        if(p1> -128 && p1<127){//verifica se é BIPUSH OU ICONST SE NAO FOR É LDC
-            if(p1==0){
+        if(strcmp(p3,"\0")==0){
+            if(p1==-1 && p2==-2){
                 inst[PROXINST].label=-1;
                 inst[PROXINST].p1=-1;
                 inst[PROXINST].p2=-1;
                 inst[PROXINST]._instrucao=10;
+                strcpy(inst[PROXINST].str,p3);
             }
-            else if(p1==1){
-                inst[PROXINST].label=-1;
-                inst[PROXINST].p1=-1;
-                inst[PROXINST].p2=-1;
-                inst[PROXINST]._instrucao=11;
+            else if(p1> -128 && p1<127){//verifica se é BIPUSH OU ICONST SE NAO FOR É LDC
+                if(p1==0){
+                    inst[PROXINST].label=-1;
+                    inst[PROXINST].p1=-1;
+                    inst[PROXINST].p2=-1;
+                    inst[PROXINST]._instrucao=10;
+                    strcpy(inst[PROXINST].str,"\0");
+                }
+                else if(p1==1){
+                    inst[PROXINST].label=-1;
+                    inst[PROXINST].p1=-1;
+                    inst[PROXINST].p2=-1;
+                    inst[PROXINST]._instrucao=11;
+                    strcpy(inst[PROXINST].str,"\0");
+                }
+                else if(p1==2){
+                    inst[PROXINST].label=-1;
+                    inst[PROXINST].p1=-1;
+                    inst[PROXINST].p2=-1;
+                    inst[PROXINST]._instrucao=12;
+                    strcpy(inst[PROXINST].str,"\0");
+                }
+                else if(p1==3){
+                    inst[PROXINST].label=-1;
+                    inst[PROXINST].p1=-1;
+                    inst[PROXINST].p2=-1;
+                    inst[PROXINST]._instrucao=13;
+                    strcpy(inst[PROXINST].str,"\0");
+                }
+                else if(p1==4){
+                    inst[PROXINST].label=-1;
+                    inst[PROXINST].p1=-1;
+                    inst[PROXINST].p2=-1;
+                    inst[PROXINST]._instrucao=14;
+                    strcpy(inst[PROXINST].str,"\0");
+                }
+                else if(p1==5){
+                    inst[PROXINST].label=-1;
+                    inst[PROXINST].p1=-1;
+                    inst[PROXINST].p2=-1;
+                    inst[PROXINST]._instrucao=15;
+                    strcpy(inst[PROXINST].str,"\0");
+                }
+                else{
+                    inst[PROXINST].label=-1;
+                    inst[PROXINST].p1=p1;
+                    inst[PROXINST].p2=-1;
+                    inst[PROXINST]._instrucao=20;
+                    strcpy(inst[PROXINST].str,"\0");
+                }
             }
-            else if(p1==2){
-                inst[PROXINST].label=-1;
-                inst[PROXINST].p1=-1;
-                inst[PROXINST].p2=-1;
-                inst[PROXINST]._instrucao=12;
-            }
-            else if(p1==3){
-                inst[PROXINST].label=-1;
-                inst[PROXINST].p1=-1;
-                inst[PROXINST].p2=-1;
-                inst[PROXINST]._instrucao=13;
-            }
-            else if(p1==4){
-                inst[PROXINST].label=-1;
-                inst[PROXINST].p1=-1;
-                inst[PROXINST].p2=-1;
-                inst[PROXINST]._instrucao=14;
-            }
-            else if(p1==5){
-                inst[PROXINST].label=-1;
-                inst[PROXINST].p1=-1;
-                inst[PROXINST].p2=-1;
-                inst[PROXINST]._instrucao=15;
-            }
-            else{
+            else{//É LDC QUE GRAVAREMOS DE NUMERO
                 inst[PROXINST].label=-1;
                 inst[PROXINST].p1=p1;
                 inst[PROXINST].p2=-1;
-                inst[PROXINST]._instrucao=20;
+                inst[PROXINST]._instrucao=21;
+                strcpy(inst[PROXINST].str,"\0");
             }
         }
-        else{//É LDC
+        else{//É LDC DE STRING
             inst[PROXINST].label=-1;
             inst[PROXINST].p1=p1;
             inst[PROXINST].p2=-1;
-            inst[PROXINST]._instrucao=21;
+            inst[PROXINST]._instrucao=26;
+            strcpy(inst[PROXINST].str,p3);
         }
     }
     else if(comando==16){ //ILOAD
-        inst[PROXINST].label=-1;
-        inst[PROXINST].p1=p1;
-        inst[PROXINST].p2=-1;
-        inst[PROXINST]._instrucao=16;
+        if(strcmp(inst[PROXINST-1].str,"\0")==0){
+            inst[PROXINST].label=-1;
+            inst[PROXINST].p1=p1;
+            inst[PROXINST].p2=-1;
+            inst[PROXINST]._instrucao=16;
+            strcpy(inst[PROXINST].str,"\0");
+        }
+        else{
+            inst[PROXINST].label=-1;
+            inst[PROXINST].p1=p1;
+            inst[PROXINST].p2=-1;
+            inst[PROXINST]._instrucao=25;//escreve aload
+            strcpy(inst[PROXINST].str,p3);
+        }
     }
     else if(comando==17){ //ISTORE
-        inst[PROXINST].label=-1;
-        inst[PROXINST].p1=p1;
-        inst[PROXINST].p2=-1;
-        inst[PROXINST]._instrucao=17;
+        if(strcmp("\0",p3)==0){
+            inst[PROXINST].label=-1;
+            inst[PROXINST].p1=p1;
+            inst[PROXINST].p2=-1;
+            inst[PROXINST]._instrucao=17;
+            strcpy(inst[PROXINST].str,"\0");
+        }
+        else{//ASTORE
+            inst[PROXINST].label=-1;
+            inst[PROXINST].p1=p1;
+            inst[PROXINST].p2=-1;
+            inst[PROXINST]._instrucao=24;
+            strcpy(inst[PROXINST].str,p3);
+        }
     }
     else if(comando==18){//IADD
         inst[PROXINST].label=-1;
         inst[PROXINST].p1=-1;
         inst[PROXINST].p2=-1;
         inst[PROXINST]._instrucao=18;
+        strcpy(inst[PROXINST].str,"\0");
     }
     else if(comando==19){//IMULL
         inst[PROXINST].label=-1;
         inst[PROXINST].p1=-1;
         inst[PROXINST].p2=-1;
         inst[PROXINST]._instrucao=19;
+        strcpy(inst[PROXINST].str,"\0");
     }
     else if(comando==22){//IDIV
         inst[PROXINST].label=-1;
         inst[PROXINST].p1=-1;
         inst[PROXINST].p2=-1;
         inst[PROXINST]._instrucao=22;
+        strcpy(inst[PROXINST].str,"\0");
     }
     else if(comando==23){//ISUB
         inst[PROXINST].label=-1;
         inst[PROXINST].p1=-1;
         inst[PROXINST].p2=-1;
         inst[PROXINST]._instrucao=23;
+        strcpy(inst[PROXINST].str,"\0");
     }
     else if(comando==30){//PRINT_INT
+        if(strcmp("int",procura_tabela_tipo(p1))==0){
+            inst[PROXINST].label=-1;
+            inst[PROXINST].p1=p1;
+            inst[PROXINST].p2=-1;
+            inst[PROXINST]._instrucao=30;
+            strcpy(inst[PROXINST].str,"\0");
+        }
+        else{
+            inst[PROXINST].label=-1;
+            inst[PROXINST].p1=p1;
+            inst[PROXINST].p2=-1;
+            inst[PROXINST]._instrucao=32;
+            strcpy(inst[PROXINST].str,p3);
+        }
+    }
+    else if(comando==31){//PRINT_STG
         inst[PROXINST].label=-1;
-        inst[PROXINST].p1=p1;
+        inst[PROXINST].p1=-1;
         inst[PROXINST].p2=-1;
-        inst[PROXINST]._instrucao=30;
+        inst[PROXINST]._instrucao=31;
+        strcpy(inst[PROXINST].str,p3);
     }
     PROXINST++;
 }
@@ -229,10 +297,22 @@ int procura_tabela(char id[TAMANHO_VARIAVEL]){
     }
 }
 
+char *procura_tabela_tipo(int p1){
+    Tabela *aux;
+    aux=tab;
+    while(aux->pos!=p1){
+        if(aux->proximo!=NULL)
+            aux=aux->proximo;
+        else
+            return("\0");
+    }
+    return(aux->tipo);
+}
+
 void mostra_gerar(){
     int i;
     for(i=0;i<PROXINST;i++){
-        printf("LABEL: %i\tP1: %i\tP2: %i\t _INSTRUCAO: %i\n",inst[i].label,inst[i].p1,inst[i].p2,inst[i]._instrucao);
+        printf("LABEL: %i\tP1: %i\tP2: %i\t _INSTRUCAO: %i STR: %s\n",inst[i].label,inst[i].p1,inst[i].p2,inst[i]._instrucao,inst[i].str);
     }
 }
 
@@ -261,7 +341,7 @@ void cria_jasmin(){
 	}
 	else{
         fprintf(fp,".class public entradaJasmin\n.super java/lang/Object\n\n.method public <init>()V\n   aload_0\n\n   invokenonvirtual java/lang/Object/<init>()V\n   return\n.end method\n\n");
-        fprintf(fp,".method public static main([Ljava/lang/String;)V\n   .limit stack 2\n   .limit locals %i\n",POS);
+        fprintf(fp,".method public static main([Ljava/lang/String;)V\n   .limit stack 2\n   .limit locals %i\n",POS+1);
         for(i=0;i<PROXINST;i++){
             if(inst[i].label!=-1){
                 valor_label++;
@@ -270,7 +350,7 @@ void cria_jasmin(){
             if(inst[i]._instrucao>=10 && inst[i]._instrucao<=15){//escreve iconst_n
                 fprintf(fp,"   iconst_%i\n",inst[i]._instrucao-10);
             }
-            else if(inst[i]._instrucao==16 && inst[i+1]._instrucao!=30){//escreve iload
+            else if(inst[i]._instrucao==16 && inst[i+1]._instrucao!=30 && inst[i+1]._instrucao!=31 && inst[i+1]._instrucao!=32){//escreve iload
                 fprintf(fp,"   iload %i\n",inst[i].p1);
             }
             else if(inst[i]._instrucao==17){//escreve istore
@@ -285,7 +365,7 @@ void cria_jasmin(){
             else if(inst[i]._instrucao==20){//escreve bipush
                 fprintf(fp,"   bipush %i\n",inst[i].p1);
             }
-            else if(inst[i]._instrucao==21){//escreve ldc
+            else if(inst[i]._instrucao==21){//escreve ldc int
                 fprintf(fp,"   ldc %i\n",inst[i].p1);
             }
             else if(inst[i]._instrucao==22){//escreve idiv
@@ -294,16 +374,30 @@ void cria_jasmin(){
             else if(inst[i]._instrucao==23){//escreve isub
                 fprintf(fp,"   isub\n");
             }
+            else if(inst[i]._instrucao==24){//escreve astore
+                fprintf(fp,"   astore %i\n",inst[i].p1);
+            }
+            else if(inst[i]._instrucao==25 && inst[i+1]._instrucao!=30 && inst[i+1]._instrucao!=31 && inst[i+1]._instrucao!=32 ){//escreve aload
+                fprintf(fp,"   aload %i\n",inst[i].p1);
+            }
+            else if(inst[i]._instrucao==26){//escreve ldc string
+                fprintf(fp,"   ldc %s\n",inst[i].str);
+            }
             else if(inst[i]._instrucao==30){//PRINT de INT
                 fprintf(fp,"   getstatic java/lang/System/out Ljava/io/PrintStream;\n");
                 fprintf(fp,"   iload %i\n",inst[i].p1);
-                fprintf(fp,"   invokevirtual java/io/PrintStream/println(I)V\n");
+                fprintf(fp,"   invokevirtual java/io/PrintStream/print(I)V\n");
             }
-            /*else if(inst[i]._instrucao==31){//PRINT de STRING
-                fprintf(fp,"getstatic java/lang/System/out Ljava/io/PrintStream\n");
-                fprintf(fp,"ldc \"%s\"\n",inst[i].s);
-                fprintf(fp,"invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V\n");
-            }*/
+            else if(inst[i]._instrucao==31){//PRINT de STRING
+                fprintf(fp,"   getstatic java/lang/System/out Ljava/io/PrintStream;\n");
+                fprintf(fp,"   ldc %s\n",inst[i].str);
+                fprintf(fp,"   invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V\n");
+            }
+            else if(inst[i]._instrucao==32){//PRINT de STRING
+                fprintf(fp,"   getstatic java/lang/System/out Ljava/io/PrintStream;\n");
+                fprintf(fp,"   aload %i\n",inst[i].p1);
+                fprintf(fp,"   invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V\n");
+            }
         }
         fprintf(fp,"   return\n.end method\n");
 	}

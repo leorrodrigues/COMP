@@ -10,26 +10,42 @@
 
 .method public static main([Ljava/lang/String;)V
    .limit stack 2
-   .limit locals 4
-   iconst_1
-   istore_1
-   iconst_2
-   iload_1
-   iadd
-   istore_2
-   iconst_2
-   istore_3
-   iload_3
-   ldc 1000
-   imul
-   istore_3
-   iload_1
-   iload_2
-   iadd
-   istore_5
-   iload_5
-   iconst_2
+   .limit locals 7
+   bipush 10
+   istore 1
+   bipush 100
+   istore 2
+   iload 2
+   iload 1
    idiv
-   istore_6
+   istore 3
+   getstatic java/lang/System/out Ljava/io/PrintStream;
+   iload 3
+   invokevirtual java/io/PrintStream/println(I)V
+   iload 3
+   iconst_1
+   iadd
+   istore 3
+   getstatic java/lang/System/out Ljava/io/PrintStream;
+   iload 3
+   invokevirtual java/io/PrintStream/println(I)V
+   ldc "Amanda"
+   astore 4
+   ldc " Rodrigues\n"
+   astore 6
+   ldc "Leonardo"
+   astore 5
+   getstatic java/lang/System/out Ljava/io/PrintStream;
+   aload 4
+   invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
+   getstatic java/lang/System/out Ljava/io/PrintStream;
+   aload 6
+   invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
+   getstatic java/lang/System/out Ljava/io/PrintStream;
+   aload 5
+   invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
+   getstatic java/lang/System/out Ljava/io/PrintStream;
+   aload 6
+   invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
    return
 .end method

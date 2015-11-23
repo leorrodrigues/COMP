@@ -1396,66 +1396,72 @@ yyreduce:
 
   case 33:
 #line 81 "grammar.y" /* yacc.c:1646  */
-    {gerar(ISTORE,procura_tabela(yylval.id),-1);}
+    {gerar(ISTORE,procura_tabela(yylval.id),-1,"\0");}
 #line 1401 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
 #line 88 "grammar.y" /* yacc.c:1646  */
-    {gerar(ISTORE,procura_tabela((yyval).id),-1);}
+    {gerar(ISTORE,procura_tabela((yyval).id),-1,"\0");}
 #line 1407 "grammar.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 38:
+#line 89 "grammar.y" /* yacc.c:1646  */
+    {gerar(BIPUSH,-1,-2,(yyvsp[-1]).str);gerar(ISTORE,procura_tabela((yyval).id),-1,(yyvsp[-1]).str);}
+#line 1413 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
 #line 91 "grammar.y" /* yacc.c:1646  */
-    {gerar(PRINT_INT,procura_tabela(yylval.id),-1);}
-#line 1413 "grammar.tab.c" /* yacc.c:1646  */
+    {gerar(PRINT_INT,procura_tabela(yylval.id),-1,(yyvsp[-2]).str);}
+#line 1419 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
 #line 92 "grammar.y" /* yacc.c:1646  */
-    {gerar(PRINT_STG,procura_tabela(yylval.id),-1);}
-#line 1419 "grammar.tab.c" /* yacc.c:1646  */
+    {gerar(PRINT_STG,procura_tabela(yylval.id),-1,(yyvsp[-2]).str);}
+#line 1425 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
 #line 103 "grammar.y" /* yacc.c:1646  */
-    {gerar(IADD,-1,-1);}
-#line 1425 "grammar.tab.c" /* yacc.c:1646  */
+    {gerar(IADD,-1,-1,"\0");}
+#line 1431 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
 #line 104 "grammar.y" /* yacc.c:1646  */
-    {gerar(ISUB,-1,-1);}
-#line 1431 "grammar.tab.c" /* yacc.c:1646  */
+    {gerar(ISUB,-1,-1,"\0");}
+#line 1437 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
 #line 107 "grammar.y" /* yacc.c:1646  */
-    {gerar(IMULL,-1,-1);}
-#line 1437 "grammar.tab.c" /* yacc.c:1646  */
+    {gerar(IMULL,-1,-1,"\0");}
+#line 1443 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
 #line 108 "grammar.y" /* yacc.c:1646  */
-    {gerar(IDIV,-1,-1);}
-#line 1443 "grammar.tab.c" /* yacc.c:1646  */
+    {gerar(IDIV,-1,-1,"\0");}
+#line 1449 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
 #line 113 "grammar.y" /* yacc.c:1646  */
-    {gerar(ILOAD,procura_tabela(yylval.id),-1);}
-#line 1449 "grammar.tab.c" /* yacc.c:1646  */
+    {gerar(ILOAD,procura_tabela(yylval.id),-1,"\0");}
+#line 1455 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
 #line 114 "grammar.y" /* yacc.c:1646  */
-    {gerar(BIPUSH,yylval.constante,-1);}
-#line 1455 "grammar.tab.c" /* yacc.c:1646  */
+    {gerar(BIPUSH,yylval.constante,-1,"\0");}
+#line 1461 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1459 "grammar.tab.c" /* yacc.c:1646  */
+#line 1465 "grammar.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

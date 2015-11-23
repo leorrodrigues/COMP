@@ -1,18 +1,5 @@
-{
-	int a,b,c,d,e,f;	
-	String s1,s2,nome;
-	int macaco;
-	String JoaoAntonioMoreiraGoncalvezMiranda;
-	a=1;
-	b=2+a;
-	c=2;
-	c=c*1000;
-	e=a+b;
-	f=e/2;
-	print(a);
-	print(b);
-	print(c);
-	print(d);
-	print(e);
-	print(f);
+{	
+	String s1;
+	s1="Leonardo";
+	print(s1);
 }

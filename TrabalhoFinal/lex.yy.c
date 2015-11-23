@@ -938,7 +938,7 @@ YY_RULE_SETUP
 case 32:
 YY_RULE_SETUP
 #line 45 "tokens.l"
-{return TLITERAL;}
+{strcpy(yylval.str,yytext);return TLITERAL;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP

@@ -1,19 +1,17 @@
-{
-	int a,b,c,d,e,f;	
-	String s1,s2,nome;
-	int macaco;
-	String JoaoAntonioMoreiraGoncalvezMiranda;
-	a=1;
-	b=2+a;
-	c=2;
-	c=c*1000;
-	e=a+b;
-	f=e/2;
-	d=e+f;
-	print(a);
-	print(b);
-	print(c);
-	print(d);
-	print(e);
-	print(f);
+{	
+	int x,y,z;
+	String nome1,nome2,sobrenome;
+	x=10;
+	y=100;
+	z=y/x;
+	print(z);
+	z=z+1;
+	print(z);
+	nome1="Amanda";
+	sobrenome=" Rodrigues\n";
+	nome2="Leonardo";
+	print(nome1);
+	print(sobrenome);
+	print(nome2);
+	print(sobrenome);
 }

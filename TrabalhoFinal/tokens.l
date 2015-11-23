@@ -42,7 +42,7 @@ id      (\_|[a-zA-Z])([a-zA-Z]|[0-9]|\_)*
 "!"       {return TNOT;}
 "="       {return TIGUAL;}
 
-{literal} {return TLITERAL;}
+{literal} {strcpy(yylval.str,yytext);return TLITERAL;}
 
 
 {num}	{yylval.constante=atof(yytext); return TNUM;}
