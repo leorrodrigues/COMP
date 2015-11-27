@@ -1,12 +1,16 @@
 {
-	int a;
-	String XUXU;
-	x=lol();
-	print("OI");
-	print("Valoir:");
-	read(n);
-	x=fat();
-	return (1);
-	print(x);
+	int a,b;
+	String n1;
+	a=10;
+	b=20;
+	n1="Leonardo\n";
+	print("Ola ");	
+	print(n1);
+	print("VALOR DE A: ");
+	print(a);
+	print("VALOR DE B: ");
+	print(b);
+	print("VALOR DE A+B*2-(10-50)*(A/5): ");
+	print(a+b*2-(10-50)*(a/5));
 }
 

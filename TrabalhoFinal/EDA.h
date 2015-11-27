@@ -281,6 +281,13 @@ void gerar(int comando,int p1, int p2,char p3[500]){
         inst[PROXINST]._instrucao=31;
         strcpy(inst[PROXINST].str,p3);
     }
+    else if(comando==40){
+        inst[PROXINST].label=-1;
+        inst[PROXINST].p1=-1;
+        inst[PROXINST].p2=-1;
+        inst[PROXINST]._instrucao=40;
+        strcpy(inst[PROXINST].str,"\0");
+    }
     PROXINST++;
 }
 
@@ -341,7 +348,7 @@ void cria_jasmin(){
 	}
 	else{
         fprintf(fp,".class public entradaJasmin\n.super java/lang/Object\n\n.method public <init>()V\n   aload_0\n\n   invokenonvirtual java/lang/Object/<init>()V\n   return\n.end method\n\n");
-        fprintf(fp,".method public static main([Ljava/lang/String;)V\n   .limit stack 2\n   .limit locals %i\n",POS+1);
+        fprintf(fp,".method public static main([Ljava/lang/String;)V\n   .limit stack 10\n   .limit locals %i\n",POS+1);
         for(i=0;i<PROXINST;i++){
             if(inst[i].label!=-1){
                 valor_label++;
@@ -350,8 +357,11 @@ void cria_jasmin(){
             if(inst[i]._instrucao>=10 && inst[i]._instrucao<=15){//escreve iconst_n
                 fprintf(fp,"   iconst_%i\n",inst[i]._instrucao-10);
             }
-            else if(inst[i]._instrucao==16 && inst[i+1]._instrucao!=30 && inst[i+1]._instrucao!=31 && inst[i+1]._instrucao!=32){//escreve iload
-                fprintf(fp,"   iload %i\n",inst[i].p1);
+            else if(inst[i]._instrucao==16){//escreve iload
+                if(strcmp("int",procura_tabela_tipo(inst[i].p1))==0)
+                    fprintf(fp,"   iload %i\n",inst[i].p1);
+                else
+                    fprintf(fp,"   aload %i\n",inst[i].p1);
             }
             else if(inst[i]._instrucao==17){//escreve istore
                 fprintf(fp,"   istore %i\n",inst[i].p1);
@@ -377,26 +387,24 @@ void cria_jasmin(){
             else if(inst[i]._instrucao==24){//escreve astore
                 fprintf(fp,"   astore %i\n",inst[i].p1);
             }
-            else if(inst[i]._instrucao==25 && inst[i+1]._instrucao!=30 && inst[i+1]._instrucao!=31 && inst[i+1]._instrucao!=32 ){//escreve aload
+            else if(inst[i]._instrucao==25){//escreve aload
                 fprintf(fp,"   aload %i\n",inst[i].p1);
             }
             else if(inst[i]._instrucao==26){//escreve ldc string
                 fprintf(fp,"   ldc %s\n",inst[i].str);
             }
             else if(inst[i]._instrucao==30){//PRINT de INT
-                fprintf(fp,"   getstatic java/lang/System/out Ljava/io/PrintStream;\n");
-                fprintf(fp,"   iload %i\n",inst[i].p1);
                 fprintf(fp,"   invokevirtual java/io/PrintStream/println(I)V\n");
             }
-            else if(inst[i]._instrucao==31){//PRINT de STRING
-                fprintf(fp,"   getstatic java/lang/System/out Ljava/io/PrintStream;\n");
+            else if(inst[i]._instrucao==31){//PRINT de Literal
                 fprintf(fp,"   ldc %s\n",inst[i].str);
                 fprintf(fp,"   invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V\n");
             }
             else if(inst[i]._instrucao==32){//PRINT de STRING
-                fprintf(fp,"   getstatic java/lang/System/out Ljava/io/PrintStream;\n");
-                fprintf(fp,"   aload %i\n",inst[i].p1);
                 fprintf(fp,"   invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V\n");
+            }
+            else if(inst[i]._instrucao==40){//PRINT
+                fprintf(fp,"   getstatic java/lang/System/out Ljava/io/PrintStream;\n");
             }
         }
         fprintf(fp,"   return\n.end method\n");

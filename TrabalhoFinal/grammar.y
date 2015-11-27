@@ -22,8 +22,10 @@
 #define IDIV      22
 #define ISUB      23
 
-#define PRINT_INT 30
-#define PRINT_STG 31
+#define INVOKE_INT 30
+#define INVOKE_STG 31
+
+#define PRINT     40
 
 %}
 
@@ -88,8 +90,8 @@ CmdEnquanto:	TWHILE TAPAR ExpressaoLogica TFPAR Bloco
 CmdAtrib:	TID TIGUAL ExpressaoAritimetica TPONTOEVIRGULA {gerar(ISTORE,procura_tabela($$.id),-1,"\0");}  //coloca na variavel que esta na lista de constantes o resultado aritmetico
 		| TID TIGUAL TLITERAL TPONTOEVIRGULA{gerar(BIPUSH,-1,-2,$3.str);gerar(ISTORE,procura_tabela($$.id),-1,$3.str);} 
 		;
-CmdEscrita:	TPRINT TAPAR ExpressaoAritimetica TFPAR TPONTOEVIRGULA {gerar(PRINT_INT,procura_tabela(yylval.id),-1,$3.str);} //retira da pilha normal e coloca na variavel que está na posição id.posLexval
-		| TPRINT TAPAR TLITERAL TFPAR TPONTOEVIRGULA {gerar(PRINT_STG,procura_tabela(yylval.id),-1,$3.str);}
+CmdEscrita:	TPRINT TAPAR ExpressaoAritimetica TFPAR TPONTOEVIRGULA {gerar(INVOKE_INT,procura_tabela(yylval.id),-1,$3.str);} //retira da pilha normal e coloca na variavel que está na posição id.posLexval
+		| TPRINT TAPAR TLITERAL TFPAR TPONTOEVIRGULA {gerar(INVOKE_STG,procura_tabela(yylval.id),-1,$3.str);}
 		;
 CmdLeitura:	TREAD TAPAR TID TFPAR TPONTOEVIRGULA
 		;

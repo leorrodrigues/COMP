@@ -1,14 +1,13 @@
 all:
 	flex tokens.l
-	bison -v grammar.y
+	bison grammar.y
 	cc -o expr expr.c grammar.tab.c
-	@rm -f grammar.tab.c
-	@rm -f lex.yy.c
-	@rm -f grammar.output
 	clear;
 	@echo "Digite o nome do arquivo que deseja ler: ";\
 	read nome;\
 	./expr $$nome;
+	@rm -f grammar.tab.c
+	@rm -f lex.yy.c	
 	@rm -f expr.o
 	@rm -f expr
 	@mv entradaJasmin.j .jasmin/
