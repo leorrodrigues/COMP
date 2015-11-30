@@ -44,6 +44,8 @@ Tabela *insere_tabela(Lista *lista,Dados *dados);
 
 int POS=0;//iniciamos as posicoes da tabela.
 int PROXINST=0;//iniciamos as posicoes das intrucoes
+int LABEL_VALOR=1;
+int _LABEL_VALOR=1;
 Lista *list_principal=NULL; //inicia a lista vazia
 Tabela *tab=NULL;//inicia a tabela vazia
 Dados *dados_principal;//inicia os dados vazios
@@ -288,6 +290,27 @@ void gerar(int comando,int p1, int p2,char p3[500]){
         inst[PROXINST]._instrucao=40;
         strcpy(inst[PROXINST].str,"\0");
     }
+    else if(comando==50){//IF
+        inst[PROXINST].label=-1;
+        inst[PROXINST].p1=-1;
+        inst[PROXINST].p2=-1;
+        inst[PROXINST]._instrucao=50;
+        strcpy(inst[PROXINST].str,p3);
+    }
+    else if(comando==90){//LABEL
+        inst[PROXINST].label=p1;
+        inst[PROXINST].p1=-1;
+        inst[PROXINST].p2=-1;
+        inst[PROXINST]._instrucao=90;
+        strcpy(inst[PROXINST].str,"\0");
+    }
+    else if(comando==98){//GOTO
+        inst[PROXINST].label=-1;
+        inst[PROXINST].p1=-1;
+        inst[PROXINST].p2=-1;
+        inst[PROXINST]._instrucao=98;
+        strcpy(inst[PROXINST].str,"\0");
+    }
     PROXINST++;
 }
 
@@ -340,7 +363,7 @@ void mostra_tabela(){
 
 void cria_jasmin(){
     FILE *fp;
-    int i,valor_label=0;
+    int i;
     fp=fopen("entradaJasmin.j","w");
 	if(!fp){
         puts("Erro na abertura do arquivo Jasmin\n");
@@ -350,10 +373,6 @@ void cria_jasmin(){
         fprintf(fp,".class public entradaJasmin\n.super java/lang/Object\n\n.method public <init>()V\n   aload_0\n\n   invokenonvirtual java/lang/Object/<init>()V\n   return\n.end method\n\n");
         fprintf(fp,".method public static main([Ljava/lang/String;)V\n   .limit stack 10\n   .limit locals %i\n",POS+1);
         for(i=0;i<PROXINST;i++){
-            if(inst[i].label!=-1){
-                valor_label++;
-                fprintf(fp," l%i\n",valor_label);
-            }
             if(inst[i]._instrucao>=10 && inst[i]._instrucao<=15){//escreve iconst_n
                 fprintf(fp,"   iconst_%i\n",inst[i]._instrucao-10);
             }
@@ -405,6 +424,18 @@ void cria_jasmin(){
             }
             else if(inst[i]._instrucao==40){//PRINT
                 fprintf(fp,"   getstatic java/lang/System/out Ljava/io/PrintStream;\n");
+            }
+            else if(inst[i]._instrucao==50){//IF
+                fprintf(fp,"   if_icmp%s l%i\n",inst[i].str,LABEL_VALOR);
+                LABEL_VALOR++;
+            }
+            else if(inst[i]._instrucao==90){//LABEL
+                fprintf(fp,"l%i:\n",_LABEL_VALOR);
+                _LABEL_VALOR++;
+            }
+            else if(inst[i]._instrucao==98){//GOTO
+                fprintf(fp,"   goto l%i\n",LABEL_VALOR);
+                LABEL_VALOR++;
             }
         }
         fprintf(fp,"   return\n.end method\n");

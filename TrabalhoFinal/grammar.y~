@@ -79,7 +79,7 @@ Tipo:		TINT{insere_dados(strcpy(yylval.tipo,"int"));}
 ListaId:	ListaId TVIRGULA TID{insere_lista(yylval.id);}
 		| TID {insere_lista(yylval.id);}
 		;
-Bloco:		TACHA ListaCmd TFCHA {gerar(LABEL,-1,-1,"\0");}
+Bloco:		TACHA ListaCmd TFCHA
 		;
 ListaCmd:	ListaCmd Comando
 		| Comando

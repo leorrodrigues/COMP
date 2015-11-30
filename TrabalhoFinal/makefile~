@@ -2,7 +2,6 @@ all:
 	flex tokens.l
 	bison grammar.y
 	cc -o expr expr.c grammar.tab.c
-	clear;
 	@echo "Digite o nome do arquivo que deseja ler: ";\
 	read nome;\
 	./expr $$nome;
