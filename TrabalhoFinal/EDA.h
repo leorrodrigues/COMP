@@ -29,6 +29,16 @@ typedef struct instrucao{
     char str[500];
 }Instrucao;
 
+typedef struct listaV{
+    struct listaV *proximo;
+    int posicao;
+}LV;
+
+typedef struct listaF{
+    struct listaF *proximo;
+    int posicao;
+}LF;
+
 void mostra_lista();
 void insere_lista(char id[TAMANHO_VARIAVEL]);
 void tabela_dados(Lista *lista,Dados *dados);
@@ -36,6 +46,9 @@ void mostra_tabela();
 void mostra_gerar();
 void insere_dados(char *lido);
 void cria_jasmin();
+LF *insereLF(LF *listaF,int posicao);
+LV *insereLV(LV *listaV,int posicao);
+void mergeLista(LF *listaF,LV *listaV);
 char *procura_tabela_tipo(int p1);
 int procura_tabela(char id[TAMANHO_VARIAVEL]);
 Lista *inserefim_lista(Lista *dados,char id[TAMANHO_VARIAVEL]);
@@ -46,6 +59,8 @@ int POS=0;//iniciamos as posicoes da tabela.
 int PROXINST=0;//iniciamos as posicoes das intrucoes
 int LABEL_VALOR=1;
 int _LABEL_VALOR=1;
+LF *listaFalsa=NULL;
+LV *listaVerdade=NULL;
 Lista *list_principal=NULL; //inicia a lista vazia
 Tabela *tab=NULL;//inicia a tabela vazia
 Dados *dados_principal;//inicia os dados vazios
@@ -201,7 +216,7 @@ void gerar(int comando,int p1, int p2,char p3[500]){
         }
     }
     else if(comando==16){ //ILOAD
-        if(strcmp(inst[PROXINST-1].str,"\0")==0){
+        if(strcmp(procura_tabela_tipo(p1),"int")==0){
             inst[PROXINST].label=-1;
             inst[PROXINST].p1=p1;
             inst[PROXINST].p2=-1;
@@ -296,6 +311,7 @@ void gerar(int comando,int p1, int p2,char p3[500]){
         inst[PROXINST].p2=-1;
         inst[PROXINST]._instrucao=50;
         strcpy(inst[PROXINST].str,p3);
+        listaVerdade=insereLV(listaVerdade,PROXINST);
     }
     else if(comando==90){//LABEL
         inst[PROXINST].label=p1;
@@ -310,6 +326,7 @@ void gerar(int comando,int p1, int p2,char p3[500]){
         inst[PROXINST].p2=-1;
         inst[PROXINST]._instrucao=98;
         strcpy(inst[PROXINST].str,"\0");
+        listaFalsa=insereLF(listaFalsa,PROXINST);
     }
     PROXINST++;
 }
@@ -337,6 +354,51 @@ char *procura_tabela_tipo(int p1){
             return("\0");
     }
     return(aux->tipo);
+}
+
+LF *insereLF(LF *listaF,int posicao){
+    LF *aux;
+    aux=NULL;
+    if(listaF!=NULL){
+        aux=listaF;
+        while(aux->proximo!=NULL){
+            aux=aux->proximo;
+        }
+        aux->proximo=(LF *)malloc(sizeof(LF));
+        aux->proximo->proximo=NULL;
+        aux->proximo->posicao=posicao;
+    }
+    else{
+        printf("POSICAO DO IF %i\n",posicao);
+        listaF=(LF *)malloc(sizeof(LF));
+        listaF->posicao=posicao;
+        listaF->proximo=NULL;
+    }
+    return(listaF);
+}
+
+LV *insereLV(LV *listaV,int posicao){
+    LV *aux;
+    aux=NULL;
+    if(listaV!=NULL){
+        aux=listaV;
+        while(aux->proximo!=NULL){
+            aux=aux->proximo;
+        }
+        aux->proximo=(LV *)malloc(sizeof(LV));
+        aux->proximo->proximo=NULL;
+        aux->proximo->posicao=posicao;
+    }
+    else{
+        listaV=(LV *)malloc(sizeof(LV));
+        listaV->posicao=posicao;
+        listaV->proximo=NULL;
+    }
+    return(listaV);
+}
+
+void mergeLista(LF *listaF,LV *listaV){
+
 }
 
 void mostra_gerar(){
@@ -426,16 +488,24 @@ void cria_jasmin(){
                 fprintf(fp,"   getstatic java/lang/System/out Ljava/io/PrintStream;\n");
             }
             else if(inst[i]._instrucao==50){//IF
-                fprintf(fp,"   if_icmp%s l%i\n",inst[i].str,LABEL_VALOR);
-                LABEL_VALOR++;
+                fprintf(fp,"   if_icmp%s l%i\n",inst[i].str,inst[i].label);
+                if(listaVerdade->proximo!=NULL)
+                    listaVerdade=listaVerdade->proximo;
             }
             else if(inst[i]._instrucao==90){//LABEL
                 fprintf(fp,"l%i:\n",_LABEL_VALOR);
                 _LABEL_VALOR++;
+                while(inst[i+1]._instrucao==90)
+                    i++;
             }
             else if(inst[i]._instrucao==98){//GOTO
-                fprintf(fp,"   goto l%i\n",LABEL_VALOR);
-                LABEL_VALOR++;
+                fprintf(fp,"   goto l%i\n",inst[i].label);
+                if(listaFalsa->proximo!=NULL)
+                    listaFalsa=listaFalsa->proximo;
+                fprintf(fp,"l%i:\n",_LABEL_VALOR);
+                _LABEL_VALOR++;
+                while(inst[i+1]._instrucao==90)
+                    i++;
             }
         }
         fprintf(fp,"   return\n.end method\n");

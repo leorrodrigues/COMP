@@ -2,9 +2,7 @@
 	int a,b;
 	a=10;
 	b=11;
-	if(a>b){
-	   print("OI\n");
-        }
+	print(a);
 	print("TCHAU\n");
 }
 

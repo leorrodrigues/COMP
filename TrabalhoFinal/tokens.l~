@@ -11,7 +11,7 @@ id      (\_|[a-zA-Z])([a-zA-Z]|[0-9]|\_)*
 "int"     {return TINT;}
 "String"  {return TSTRING;}
 "return"  {return TRETURN;}
-"if"      {gerar(IF,-1,-1,"\0");return TIF;}
+"if"      {return TIF;}
 "else"    {return TELSE;}
 "while"   {return TWHILE;}
 "print"   {gerar(PRINT,-1,-1,"\0");return TPRINT;}

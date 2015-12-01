@@ -3,8 +3,8 @@
 	a=10;
 	b=11;
 	if(a<b){
-	   print("OI\n");
-        }
+		print("OI\n");	
+	}
 	print("TCHAU\n");
 }
 

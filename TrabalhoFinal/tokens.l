@@ -14,7 +14,7 @@ id      (\_|[a-zA-Z])([a-zA-Z]|[0-9]|\_)*
 "if"      {return TIF;}
 "else"    {return TELSE;}
 "while"   {return TWHILE;}
-"print"   {gerar(PRINT,-1,-1,"\0");return TPRINT;}
+"print"   {return TPRINT;}
 "read"    {return TREAD;}
 {id}      {strcpy(yylval.id,yytext);return TID;}
 

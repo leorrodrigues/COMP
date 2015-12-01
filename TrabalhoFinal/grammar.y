@@ -94,16 +94,18 @@ Comando:	CmdSe
 		;
 Retorno:	TRETURN ExpressaoAritimetica TPONTOEVIRGULA {gerar(ISTORE,procura_tabela(yylval.id),-1,"\0");}  //coloca na variavel que está na lista de constantes
 		;
-CmdSe:		TIF TAPAR ExpressaoLogica TFPAR Bloco 
-		| TIF TAPAR ExpressaoLogica TFPAR Bloco TELSE Bloco 
+CmdSe:		TIF DerivaIf TAPAR ExpressaoLogica TFPAR Bloco 
+		| TIF DerivaIf TAPAR ExpressaoLogica TFPAR Bloco TELSE Bloco 
 		;
 CmdEnquanto:	TWHILE TAPAR ExpressaoLogica TFPAR Bloco
 		;
 CmdAtrib:	TID TIGUAL ExpressaoAritimetica TPONTOEVIRGULA {gerar(ISTORE,procura_tabela($$.id),-1,"\0");}  //coloca na variavel que esta na lista de constantes o resultado aritmetico
 		| TID TIGUAL TLITERAL TPONTOEVIRGULA{gerar(BIPUSH,-1,-2,$3.str);gerar(ISTORE,procura_tabela($$.id),-1,$3.str);} 
 		;
-CmdEscrita:	TPRINT TAPAR ExpressaoAritimetica TFPAR TPONTOEVIRGULA {gerar(INVOKE_INT,procura_tabela(yylval.id),-1,$3.str);} //retira da pilha normal e coloca na variavel que está na posição id.posLexval
-		| TPRINT TAPAR TLITERAL TFPAR TPONTOEVIRGULA {gerar(INVOKE_STG,procura_tabela(yylval.id),-1,$3.str);}
+CmdEscrita:	TPRINT TAPAR DerivaPrint ExpressaoAritimetica TFPAR TPONTOEVIRGULA {gerar(INVOKE_INT,procura_tabela(yylval.id),-1,$4.str);} //retira da pilha normal e coloca na variavel que está na posição id.posLexval
+		| TPRINT TAPAR DerivaPrint TLITERAL TFPAR TPONTOEVIRGULA {gerar(INVOKE_STG,procura_tabela(yylval.id),-1,$4.str);}
+		;
+DerivaPrint:	{gerar(PRINT,-1,-1,"\0");}
 		;
 CmdLeitura:	TREAD TAPAR TID TFPAR TPONTOEVIRGULA
 		;
@@ -129,7 +131,6 @@ Fator:		TAPAR ExpressaoAritimetica TFPAR
 		| ChamadaFuncao
 		;
 
-
 ExpressaoRelacional:	ExpressaoAritimetica Op ExpRelacionalB {strcpy($$.str,$2.str);}
 			;
 
@@ -142,9 +143,9 @@ Op:		TDIFERENTE {strcpy($$.str,"ne");}
 		| TMAIOR {strcpy($$.str,"gt");}
 		| TMENOR {strcpy($$.str,"lt");}
 		;
-ExpressaoLogica:	ExpressaoLogica TAND TermoLogico
-			| ExpressaoLogica TOR TermoLogico
-			| TermoLogico {gerar(IF,-1,-1,$1.str);gerar(GOTO,-1,-1,"\0");gerar(LABEL,-1,-1,"\0");}
+ExpressaoLogica:	ExpressaoLogica TAND TermoLogico {gerar(IF,-1,-1,$3.str);gerar(GOTO,-1,-1,"\0");gerar(LABEL,-1,-1,"\0");}
+			| ExpressaoLogica TOR TermoLogico {gerar(IF,-1,-1,$3.str);gerar(GOTO,-1,-1,"\0");gerar(LABEL,-1,-1,"\0");}
+			| TermoLogico {gerar(IF,-1,-1,$1.str);gerar(GOTO,-1,-1,"\0");}
 			;
 TermoLogico:	TAPAR ExpressaoLogica TFPAR
 		| TNOT TermoLogico
