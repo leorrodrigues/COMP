@@ -4,7 +4,8 @@ all:
 	cc -o expr expr.c grammar.tab.c
 	@echo "Digite o nome do arquivo que deseja ler: ";\
 	read nome;\
-	./expr $$nome;
+	clear;\
+	./expr $$nome;	
 	@rm -f grammar.tab.c
 	@rm -f lex.yy.c	
 	@rm -f expr.o

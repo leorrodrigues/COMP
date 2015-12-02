@@ -2,9 +2,13 @@
 	int a,b;
 	a=10;
 	b=11;
-	if(a<b){
-		print("OI\n");	
+	if(a==10 && b>a){
+		print("IF 1\n");
+		if(b==11 || a<0){
+			print("IF 2\n");
+		}
+		print("SAINDO DO IF\n");
 	}
-	print("TCHAU\n");
+	print("BLOCO FORA DO IF\n");
 }
 

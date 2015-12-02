@@ -19,9 +19,11 @@ typedef struct tabela{
 
 typedef struct dados{
     char tipo[50];
-    int constante,valor;
+    int constante,valor,label;
     char id[50];
     char str[500];
+    struct listaLoop *LV;
+    struct listaLoop *LF;
 }Dados;
 
 typedef struct instrucao{
@@ -29,38 +31,36 @@ typedef struct instrucao{
     char str[500];
 }Instrucao;
 
-typedef struct listaV{
-    struct listaV *proximo;
+typedef struct listaLoop{
+    struct listaLoop *proximo;
     int posicao;
-}LV;
+}LL;
 
-typedef struct listaF{
-    struct listaF *proximo;
-    int posicao;
-}LF;
-
+int novolabel();
+LL *copia(LL *destino,LL *origem);
+void gerar_loop(int i);
 void mostra_lista();
 void insere_lista(char id[TAMANHO_VARIAVEL]);
 void tabela_dados(Lista *lista,Dados *dados);
 void mostra_tabela();
 void mostra_gerar();
+void mostra_LL(LL *listaL);
 void insere_dados(char *lido);
 void cria_jasmin();
-LF *insereLF(LF *listaF,int posicao);
-LV *insereLV(LV *listaV,int posicao);
-void mergeLista(LF *listaF,LV *listaV);
+LL *insereLL(LL *listaF,int posicao);
+void mergeLista(LL *destino,LL *origem);
 char *procura_tabela_tipo(int p1);
 int procura_tabela(char id[TAMANHO_VARIAVEL]);
 Lista *inserefim_lista(Lista *dados,char id[TAMANHO_VARIAVEL]);
 Dados *inserefim_dados(char *lido);
 Tabela *insere_tabela(Lista *lista,Dados *dados);
 
+char OP[3]="\0";
+int _LOOP=0;
 int POS=0;//iniciamos as posicoes da tabela.
 int PROXINST=0;//iniciamos as posicoes das intrucoes
-int LABEL_VALOR=1;
+int LABEL_VALOR=0;
 int _LABEL_VALOR=1;
-LF *listaFalsa=NULL;
-LV *listaVerdade=NULL;
 Lista *list_principal=NULL; //inicia a lista vazia
 Tabela *tab=NULL;//inicia a tabela vazia
 Dados *dados_principal;//inicia os dados vazios
@@ -305,13 +305,14 @@ void gerar(int comando,int p1, int p2,char p3[500]){
         inst[PROXINST]._instrucao=40;
         strcpy(inst[PROXINST].str,"\0");
     }
-    else if(comando==50){//IF
-        inst[PROXINST].label=-1;
-        inst[PROXINST].p1=-1;
-        inst[PROXINST].p2=-1;
-        inst[PROXINST]._instrucao=50;
-        strcpy(inst[PROXINST].str,p3);
-        listaVerdade=insereLV(listaVerdade,PROXINST);
+    else if(comando==50){//LOOP
+        if(_LOOP==1){//estamos nos referindo no IF
+            inst[PROXINST].label=-1;
+            inst[PROXINST].p1=-1;
+            inst[PROXINST].p2=-1;
+            inst[PROXINST]._instrucao=50;
+            strcpy(inst[PROXINST].str,p3);
+        }
     }
     else if(comando==90){//LABEL
         inst[PROXINST].label=p1;
@@ -326,7 +327,6 @@ void gerar(int comando,int p1, int p2,char p3[500]){
         inst[PROXINST].p2=-1;
         inst[PROXINST]._instrucao=98;
         strcpy(inst[PROXINST].str,"\0");
-        listaFalsa=insereLF(listaFalsa,PROXINST);
     }
     PROXINST++;
 }
@@ -356,49 +356,89 @@ char *procura_tabela_tipo(int p1){
     return(aux->tipo);
 }
 
-LF *insereLF(LF *listaF,int posicao){
-    LF *aux;
+int novolabel(){
+    LABEL_VALOR++;
+    printf("NOVO LABEL %i\n",LABEL_VALOR);
+    return(LABEL_VALOR);
+}
+
+LL *insereLL(LL *listaL,int posicao){
+    printf("INSERE POSICAO %i\n",posicao);
+    LL *aux;
     aux=NULL;
-    if(listaF!=NULL){
-        aux=listaF;
+    if(listaL!=NULL){
+        aux=listaL;
         while(aux->proximo!=NULL){
             aux=aux->proximo;
         }
-        aux->proximo=(LF *)malloc(sizeof(LF));
+        aux->proximo=(LL *)malloc(sizeof(LL));
         aux->proximo->proximo=NULL;
         aux->proximo->posicao=posicao;
     }
     else{
-        printf("POSICAO DO IF %i\n",posicao);
-        listaF=(LF *)malloc(sizeof(LF));
-        listaF->posicao=posicao;
-        listaF->proximo=NULL;
+        listaL=(LL *)malloc(sizeof(LL));
+        listaL->posicao=posicao;
+        listaL->proximo=NULL;
     }
-    return(listaF);
+    return(listaL);
 }
 
-LV *insereLV(LV *listaV,int posicao){
-    LV *aux;
-    aux=NULL;
-    if(listaV!=NULL){
-        aux=listaV;
-        while(aux->proximo!=NULL){
-            aux=aux->proximo;
+void mergeLista(LL *destino,LL *origem){
+    //puts("MERGE");
+    LL *aux;
+    aux=destino;
+    while(aux->proximo!=NULL)
+        aux=aux->proximo;
+    aux->proximo=origem;
+    //puts("MERGE FIM");
+    mostra_LL(destino);
+}
+
+void corrigir(LL *destino,int label){
+    LL *aux;
+    aux=destino;
+    printf("CORRIGINDO COM LABEL %i: ",label);
+    mostra_LL(destino);
+    //puts("CORRIGIR");
+    while(aux->proximo!=NULL){
+        printf("POSICAO: %i\n",aux->posicao);
+        inst[aux->posicao-2].label=label;
+        aux=aux->proximo;
+    }
+    if(aux->proximo==NULL)
+        printf("POSICAO: %i\n",aux->posicao);
+        inst[aux->posicao-2].label=label;
+    //puts("CORRIGIR FIM");
+}
+
+LL *copia(LL *destino,LL *origem){
+    //puts("COPIA");
+    printf("COPIANDO: ");
+    mostra_LL(origem);
+    LL *aux;
+    aux=(LL *)malloc(sizeof(LL));
+    destino=aux;
+    if(origem->proximo!=NULL){
+        while(origem->proximo!=NULL){
+            aux->posicao=origem->posicao;
+            origem=origem->proximo;
+            if(origem->proximo!=NULL){
+                aux->proximo=(LL *)malloc(sizeof(LL));
+                aux=aux->proximo;
+            }
         }
-        aux->proximo=(LV *)malloc(sizeof(LV));
-        aux->proximo->proximo=NULL;
-        aux->proximo->posicao=posicao;
+        if(origem->proximo==NULL){
+            aux->proximo=(LL *)malloc(sizeof(LL));
+            aux=aux->proximo;
+            aux->posicao=origem->posicao;
+        }
     }
-    else{
-        listaV=(LV *)malloc(sizeof(LV));
-        listaV->posicao=posicao;
-        listaV->proximo=NULL;
+    else if(origem->proximo==NULL){
+        aux->posicao=origem->posicao;
     }
-    return(listaV);
-}
-
-void mergeLista(LF *listaF,LV *listaV){
-
+    aux->proximo=NULL;
+    return(destino);
+    //puts("FIM COPIA");
 }
 
 void mostra_gerar(){
@@ -421,6 +461,23 @@ void mostra_tabela(){
         aux=aux->proximo;
     }
     printf("+-----+--------+--------+-----+-------+------+------+-------+------+-----+\n");
+}
+
+void mostra_LL(LL *listaL){
+    printf("LISTA: ");
+    if(listaL!=NULL){
+        printf("%i ",listaL->posicao);
+        while(listaL->proximo!=NULL){
+            listaL=listaL->proximo;
+            printf("%i ",listaL->posicao);
+        }
+    }
+    else puts("VAZIA!");
+    puts("");
+}
+
+void gerar_loop(int i){
+    _LOOP=i;
 }
 
 void cria_jasmin(){
@@ -489,19 +546,13 @@ void cria_jasmin(){
             }
             else if(inst[i]._instrucao==50){//IF
                 fprintf(fp,"   if_icmp%s l%i\n",inst[i].str,inst[i].label);
-                if(listaVerdade->proximo!=NULL)
-                    listaVerdade=listaVerdade->proximo;
             }
             else if(inst[i]._instrucao==90){//LABEL
                 fprintf(fp,"l%i:\n",_LABEL_VALOR);
                 _LABEL_VALOR++;
-                while(inst[i+1]._instrucao==90)
-                    i++;
             }
             else if(inst[i]._instrucao==98){//GOTO
                 fprintf(fp,"   goto l%i\n",inst[i].label);
-                if(listaFalsa->proximo!=NULL)
-                    listaFalsa=listaFalsa->proximo;
                 fprintf(fp,"l%i:\n",_LABEL_VALOR);
                 _LABEL_VALOR++;
                 while(inst[i+1]._instrucao==90)

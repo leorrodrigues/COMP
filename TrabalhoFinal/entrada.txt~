@@ -1,8 +1,0 @@
-{
-	int a,b;
-	a=10;
-	b=11;
-	print(a);
-	print("TCHAU\n");
-}
-
