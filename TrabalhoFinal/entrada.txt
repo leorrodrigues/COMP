@@ -2,13 +2,25 @@
 	int a,b;
 	a=10;
 	b=11;
-	if(a==10 && b>a){
-		print("IF 1\n");
-		if(b==11 || a<0){
-			print("IF 2\n");
+	if(a==10){
+		while(a<=20){
+			print("VALOR DE A: ");
+			print(a);
+			a=a+1;
 		}
-		print("SAINDO DO IF\n");
 	}
-	print("BLOCO FORA DO IF\n");
+	else{
+		print("NAO ENTROU NO IF1\n");	
+	}
+	if(b!=11 || a==21){
+		while(b>=0){
+			print("VALOR DE B: ");
+			print(b);
+			b=b-1;
+		}
+	}
+	else{
+		print("NAO ENTROU NO IF2\n");
+	}
 }
 

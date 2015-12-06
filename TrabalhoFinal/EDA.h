@@ -38,7 +38,6 @@ typedef struct listaLoop{
 
 int novolabel();
 LL *copia(LL *destino,LL *origem);
-void gerar_loop(int i);
 void mostra_lista();
 void insere_lista(char id[TAMANHO_VARIAVEL]);
 void tabela_dados(Lista *lista,Dados *dados);
@@ -306,7 +305,7 @@ void gerar(int comando,int p1, int p2,char p3[500]){
         strcpy(inst[PROXINST].str,"\0");
     }
     else if(comando==50){//LOOP
-        if(_LOOP==1){//estamos nos referindo no IF
+        if(p1==1){//estamos nos referindo no IF
             inst[PROXINST].label=-1;
             inst[PROXINST].p1=-1;
             inst[PROXINST].p2=-1;
@@ -322,7 +321,7 @@ void gerar(int comando,int p1, int p2,char p3[500]){
         strcpy(inst[PROXINST].str,"\0");
     }
     else if(comando==98){//GOTO
-        inst[PROXINST].label=-1;
+        inst[PROXINST].label=p1;
         inst[PROXINST].p1=-1;
         inst[PROXINST].p2=-1;
         inst[PROXINST]._instrucao=98;
@@ -476,10 +475,6 @@ void mostra_LL(LL *listaL){
     puts("");
 }
 
-void gerar_loop(int i){
-    _LOOP=i;
-}
-
 void cria_jasmin(){
     FILE *fp;
     int i;
@@ -553,10 +548,6 @@ void cria_jasmin(){
             }
             else if(inst[i]._instrucao==98){//GOTO
                 fprintf(fp,"   goto l%i\n",inst[i].label);
-                fprintf(fp,"l%i:\n",_LABEL_VALOR);
-                _LABEL_VALOR++;
-                while(inst[i+1]._instrucao==90)
-                    i++;
             }
         }
         fprintf(fp,"   return\n.end method\n");

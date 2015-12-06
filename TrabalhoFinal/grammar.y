@@ -79,7 +79,7 @@ Tipo:		TINT{insere_dados(strcpy(yylval.tipo,"int"));}
 ListaId:	ListaId TVIRGULA TID{insere_lista(yylval.id);}
 		| TID {insere_lista(yylval.id);}
 		;
-Bloco:		TACHA ListaCmd TFCHA {gerar(LABEL,-1,-1,"\0");}
+Bloco:		TACHA ListaCmd TFCHA
 		;
 ListaCmd:	ListaCmd Comando
 		| Comando
@@ -94,14 +94,10 @@ Comando:	CmdSe
 		;
 Retorno:	TRETURN ExpressaoAritimetica TPONTOEVIRGULA {gerar(ISTORE,procura_tabela(yylval.id),-1,"\0");}  //coloca na variavel que está na lista de constantes
 		;
-CmdSe:		TIF DerivaIf TAPAR ExpressaoLogica TFPAR M Bloco {corrigir($4.LV,$6.label);corrigir($4.LF,novolabel());}
-		| TIF DerivaIf TAPAR ExpressaoLogica TFPAR M Bloco N TELSE M Bloco {corrigir($4.LV,$6.label);corrigir($4.LF,$10.label);corrigir($8.LV,novolabel());}
+CmdSe:		TIF TAPAR ExpressaoLogica TFPAR M Bloco {corrigir($3.LV,$5.label);corrigir($3.LF,novolabel());gerar(LABEL,-1,-1,"\0");}
+		| TIF TAPAR ExpressaoLogica TFPAR M Bloco N TELSE M Bloco {corrigir($3.LV,$5.label);corrigir($3.LF,$9.label);corrigir($7.LV,novolabel());gerar(LABEL,-1,-1,"\0");}
 		;
-DerivaIf:	{gerar_loop(1);}
-		;
-CmdEnquanto:	TWHILE DerivaWhile M TAPAR ExpressaoLogica TFPAR M Bloco {corrigir($5.LV,$7.label);gerar(GOTO,$3.label,-1,"\0");corrigir($5.LF,novolabel());}
-		;
-DerivaWhile:	{gerar_loop(2);}
+CmdEnquanto:	TWHILE M TAPAR ExpressaoLogica TFPAR M Bloco {corrigir($4.LV,$6.label);gerar(GOTO,$2.label,-1,"\0");gerar(LABEL,-1,-1,"\0");corrigir($4.LF,novolabel());}
 		;
 CmdAtrib:	TID TIGUAL ExpressaoAritimetica TPONTOEVIRGULA {gerar(ISTORE,procura_tabela($$.id),-1,"\0");}  //coloca na variavel que esta na lista de constantes o resultado aritmetico
 		| TID TIGUAL TLITERAL TPONTOEVIRGULA{gerar(BIPUSH,-1,-2,$3.str);gerar(ISTORE,procura_tabela($$.id),-1,$3.str);} 
@@ -135,7 +131,7 @@ Fator:		TAPAR ExpressaoAritimetica TFPAR
 		| ChamadaFuncao
 		;
 
-ExpressaoRelacional:	ExpressaoAritimetica Op ExpRelacionalB {gerar(LOOP,-1,-1,OP);gerar(GOTO,-1,-1,"\0");}
+ExpressaoRelacional:	ExpressaoAritimetica Op ExpRelacionalB {gerar(LOOP,1,-1,OP);gerar(GOTO,-1,-1,"\0");}
 			;
 
 ExpRelacionalB: 	ExpressaoAritimetica
@@ -147,17 +143,17 @@ Op:		TDIFERENTE {strcpy(OP,"ne");}
 		| TMAIOR {strcpy(OP,"gt");}
 		| TMENOR {strcpy(OP,"lt");}
 		;
-ExpressaoLogica:	ExpressaoLogica TAND M TermoLogico {corrigir($1.LV,$3.label);mergeLista($1.LF,$4.LF);$$.LF=copia($$.LF,$1.LF);$$.LV=copia($$.LV,$4.LV);gerar(LABEL,-1,-1,"\0");}
-			| ExpressaoLogica TOR M TermoLogico {corrigir($1.LF,$3.label);mergeLista($1.LV,$4.LV);$$.LV=copia($$.LV,$1.LV);$$.LF=copia($$.LF,$4.LF);gerar(LABEL,-1,-1,"\0");}
+ExpressaoLogica:	ExpressaoLogica TAND M TermoLogico {corrigir($1.LV,$3.label);mergeLista($1.LF,$4.LF);$$.LF=copia($$.LF,$1.LF);$$.LV=copia($$.LV,$4.LV);}
+			| ExpressaoLogica TOR M TermoLogico {corrigir($1.LF,$3.label);mergeLista($1.LV,$4.LV);$$.LV=copia($$.LV,$1.LV);$$.LF=copia($$.LF,$4.LF);}
 			| TermoLogico {$$.LV=copia($$.LV,$1.LV);$$.LF=copia($$.LF,$1.LF);}
 			;
-TermoLogico:	TAPAR ExpressaoLogica TFPAR {$$.LV=copia($$.LV,$2.LV);$$.LF=copia($$.LF,$2.LF);}
+TermoLogico:	TAPAR ExpressaoLogica TFPAR {$$.LV=copia($$.LV,$2.LV);$$.LF=copia($$.LF,$2.LV);}
 		| TNOT TermoLogico {$$.LV=copia($$.LV,$2.LF);$$.LF=copia($$.LF,$2.LF);}
 		| ExpressaoRelacional {$$.LV=insereLL($$.LV,PROXINST);$$.LF=insereLL($$.LF,PROXINST+1);}
 		;
-M:		{$$.label=novolabel();}
+M:		{$$.label=novolabel();gerar(LABEL,-1,-1,"\0");}
 		;
-N:		{$$.LV=insereLL($$.LV,PROXINST);gerar(GOTO,-1,-1,"\0");}
+N:		{gerar(GOTO,-1,-1,"\0");$$.LV=insereLL($$.LV,PROXINST+1);}
 %%
 #include "lex.yy.c"
 
