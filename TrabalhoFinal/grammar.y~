@@ -127,7 +127,7 @@ Termo:		Termo TMUL Fator  {gerar(IMULL,-1,-1,"\0");}
 		| Termo TDIV Fator {gerar(IDIV,-1,-1,"\0");}
 		| Fator
 		;
-Fator:		TAPAR ExpressaoAritimetica1 TFPAR
+Fator:		TAPAR ExpressaoAritimetica TFPAR
 		| TSUB Fator 
 		| TID    {gerar(ILOAD,procura_tabela(yylval.id),-1,"\0");}  // id.posLexval -> posição do ID dentro da tabela de simbolos
 		| TNUM   {gerar(BIPUSH,yylval.constante,-1,"\0");}  //pode ser tanto bipush como ldc e iconst // const.posLexval é a constante que vai ser armazenada no topo pilha
